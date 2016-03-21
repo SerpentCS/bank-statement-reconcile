@@ -19,9 +19,10 @@ class SummaryReport(models.TransientModel):
         bank_id = context.get('active_id')
         self.env.args = cr, uid, misc.frozendict(context)
         bank = self.env['account.bank.statement'].browse(bank_id)
-        clearing_account_id = bank.journal_id and bank.journal_id.default_credit_account_id and\
-                                bank.journal_id.default_credit_account_id.clearing_account_id and\
-                                bank.journal_id.default_credit_account_id.clearing_account_id.id
+        clearing_account_id = bank.journal_id and\
+            bank.journal_id.default_credit_account_id and\
+            bank.journal_id.default_credit_account_id.clearing_account_id and\
+            bank.journal_id.default_credit_account_id.clearing_account_id.id
         if clearing_account_id:
             account_move_line_records = self.env['account.move.line'].search([
                 ('account_id', '=', clearing_account_id),
@@ -29,10 +30,15 @@ class SummaryReport(models.TransientModel):
                 ('account_id.reconcile', '=', True)
             ], order='date')
         else:
-            raise Warning(_("Create an Clearing Account to get the Unreconciled Entries."))
+            raise Warning(_("Create an Clearing Account to get "
+                            "the Unreconciled Journal Items."))
         return account_move_line_records
 
-    line_ids = fields.Many2many('account.move.line', 'wiz_unreconciles_move_line_rel', 'reconciles_id', 'accounts_id', 'Accounts to Reconcile', default=_get_unreconcile_entries)
+    line_ids = fields.Many2many('account.move.line',
+                                'wiz_unreconciles_move_line_rel',
+                                'reconciles_id', 'accounts_id',
+                                'Journal Items to Reconcile',
+                                default=_get_unreconcile_entries)
 
     @api.multi
     def process_wiz(self):

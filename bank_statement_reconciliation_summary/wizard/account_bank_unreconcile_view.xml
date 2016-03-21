@@ -17,7 +17,7 @@
             </field>
         </record>
 
-        <act_window name="Unreconcile Entries"
+        <act_window name="Unreconcile Journal Items"
             res_model="wiz.bank.unreconcile"
             src_model="account.bank.statement"
             view_mode="form"

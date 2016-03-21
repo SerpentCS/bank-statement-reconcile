@@ -15,7 +15,7 @@
                         name="%(bank_statement_reconcile_action)d"
                         attrs="{'invisible': [('state', '!=', 'draft')]}"
                         style="width: 180px !important;">
-                        <div><strong>Import<br/>Unreconciled Entries</strong></div>
+                        <div><strong>Import Unreconciled<br/>Journal Items</strong></div>
                     </button>
                 </button>
             </field>
