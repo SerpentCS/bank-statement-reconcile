@@ -26,8 +26,10 @@ class SummaryReport(models.TransientModel):
         if clearing_account_id:
             account_move_line_records = self.env['account.move.line'].search([
                 ('account_id', '=', clearing_account_id),
+                ('account_id.reconcile', '=', True),
+                '|',
                 ('reconcile_id', '=', False),
-                ('account_id.reconcile', '=', True)
+                ('reconcile_partial_id', '!=', False)
             ], order='date')
         else:
             raise Warning(_("Create an Clearing Account to get "
